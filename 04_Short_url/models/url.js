@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const urlSchema = new mongoose.Schema(
     {
-        ShortId: {
+        shortId: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
 
         redirectURL:{
