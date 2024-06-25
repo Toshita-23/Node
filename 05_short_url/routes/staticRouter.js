@@ -1,10 +1,10 @@
 const express = require('express');
-
+const URL = require("../models/url")
 const router = express.Router();
 
-router.get('/', async (res, req) =>{
+router.get('/', async (req, res) =>{
     const allUrls = await URL.find({})
-    return req.render("home", {
+    return res.render("home", {
         urls: allUrls
     });
 })
