@@ -6,16 +6,15 @@ function checkForAuthenticationCookie(cookieName){
         if (!tookenCookieValue){
            return next();
         }
-
         try{
-            const userPlayLoad = validateToken(tookenCookieValue);
-            req.user = userPlayLoad;
+            const userPlayload = validateToken(tookenCookieValue);
+            req.user = userPlayload;
         } catch(error){}
-       return next();
-
+       
+        return next();
     }
 }
 
-module.exports ={
-    checkForAuthenticationCookie
-}
+module.exports = {
+    checkForAuthenticationCookie,
+};

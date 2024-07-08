@@ -33,7 +33,7 @@ router.post("/signup", async(req, res) => {
     await User.create({
         fullName,
         email,
-        password
+        password,
     });
     return res.redirect("/");
 })

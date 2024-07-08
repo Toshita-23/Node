@@ -2,13 +2,13 @@ const { Router } = require('express');
 const multer = require('multer');
 const path = require('path');
 
-const Blog = require("../models/blog")
+const Blog = require("../models/blog");
 
 const router = Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, path.resolve(`./public/uploads`))
+      cb(null, path.resolve(`./public/uploads/`))
     },
     filename: function (req, file, cb) {
       const fileName = `${Date.now()}-${file.originalname}`;
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     }
   })
   
-  const upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
 
 router.get("/add-new", (req, res) =>{
     return res.render('addBlog', {
@@ -24,15 +24,24 @@ router.get("/add-new", (req, res) =>{
     })
 })
 
+router.get("/:id", async(req, res)=>{
+  const blog = await Blog.findById(req.params.id).populate("createdBy");
+  console.log("blog", blog)
+  return res.render("blog", {
+    user: req.user,
+    blog,
+  })
+})
+
 router.post("/", upload.single('coverImage'), async (req, res) =>{
-    const {title, body} = req.body
-   const blog = await Blog.create({
+   const {title, body} = req.body
+  const blog = await Blog.create({
         body,
         title,
-        createdBy: req.user._id,
+        createdBy: req.user.id, // ask lakshya why .id works here not _id
         coverImageURL: `/uploads/${req.file.filename}`
     })
-    return res.redirect(`/blog/${blog._id}`);
+    return res.redirect(`/blogs/${blog._id}`);
 })
 
 module.exports = router;
